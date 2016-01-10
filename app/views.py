@@ -19,6 +19,7 @@ def login():
         date2 = form.openid2.data.split(' ')
         start = date1[2] + "-" + date1[0] + "-" + date1[1]+"T00:00:00"
         end = date2[2] + "-" + date2[0] + "-" + date2[1]+"T23:59:59"
+        
         print(start)
         #url = 'https://api.venmo.com/v1/oauth/authorize?client_id=3363&scope=make_payments%20access_profile&response_type=token'
         #r = requests.request(url)
@@ -28,11 +29,14 @@ def login():
         r = requests.get(url)
         response = r.json()
         pprint(response)
-        #length = len(response['data'])
+        f = open('ledger.txt', 'r+')
+        
+        length = len(response['data'])
         #print(length)
-        #for number in range(0, length):
-        #	pprint(response['data'][number]['amount'])
-        return redirect('/submit')
+        for number in range(0, length):
+        	f.write(response['data'][number]['amount'])
+       
+       return redirect('/submit')
 
     return render_template('login.html',
                            title='Sign In',
